@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>StenoPro — English Steno Practice</title>
+<style>
+:root{--bg:#f4f7fb;--card:#fff;--text:#182230;--muted:#697586;--primary:#2563eb;--soft:#e8f0ff;--border:#e4e9f0;--good:#138a4b;--bad:#d93025}
+*{box-sizing:border-box}body{margin:0;font-family:Inter,Arial,sans-serif;background:var(--bg);color:var(--text)}
+header{background:linear-gradient(135deg,#173b8f,#2563eb);color:#fff;padding:22px 18px}
+.header{max-width:1100px;margin:auto;display:flex;justify-content:space-between;align-items:center;gap:16px}
+.logo{font-size:25px;font-weight:800}.tag{font-size:13px;opacity:.85}
+.container{max-width:1100px;margin:22px auto;padding:0 16px}
+.tabs{display:flex;gap:8px;overflow:auto;margin-bottom:18px}.tab{border:0;background:var(--card);padding:12px 16px;border-radius:10px;font-weight:700;cursor:pointer;color:var(--muted);white-space:nowrap}.tab.active{background:var(--primary);color:white}
+.grid{display:grid;grid-template-columns:1.3fr .7fr;gap:18px}.card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:20px;box-shadow:0 5px 18px #1d355708}
+h2,h3{margin-top:0}.controls{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:15px 0}
+label{font-size:12px;color:var(--muted);font-weight:700;display:block;margin-bottom:6px}
+select,input,textarea{width:100%;padding:11px;border:1px solid var(--border);border-radius:9px;font:inherit;background:#fff}
+.btn{border:0;border-radius:9px;padding:11px 15px;font-weight:800;cursor:pointer}.primary{background:var(--primary);color:#fff}.secondary{background:var(--soft);color:var(--primary)}.danger{background:#fff0ef;color:var(--bad)}
+.actions{display:flex;gap:9px;flex-wrap:wrap}.passage{background:#f8fafc;border:1px solid var(--border);padding:18px;border-radius:12px;line-height:1.75;font-size:16px;min-height:150px}.timer{font-size:36px;font-weight:900;text-align:center;margin:5px 0 15px}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}.stat{background:#f8fafc;padding:14px;border-radius:11px;text-align:center}.stat b{display:block;font-size:23px}.stat span{font-size:12px;color:var(--muted)}
+textarea{min-height:220px;resize:vertical;line-height:1.6}.result{margin-top:15px;padding:16px;border-radius:12px;background:#eefbf4;border:1px solid #bfe8d0}.hidden{display:none}.history{width:100%;border-collapse:collapse}.history th,.history td{padding:10px;border-bottom:1px solid var(--border);text-align:left;font-size:13px}
+.audio-box{display:flex;gap:10px;align-items:center;flex-wrap:wrap}.audio-box audio{width:min(100%,520px)}
+.diff{margin-top:15px;padding:16px;border:1px solid var(--border);border-radius:12px;line-height:1.8;background:#f8fafc}
+.blindSource{font-size:12px;color:var(--muted);background:#f8fafc;border:1px dashed var(--border);padding:10px;border-radius:9px}.correct{background:#dff6e8;border-radius:4px;padding:1px 3px}.wrong{background:#ffe2df;border-radius:4px;padding:1px 3px;text-decoration:underline;text-decoration-color:#d93025}
+.missing{background:#fff0c9;border-radius:4px;padding:1px 3px}.small{font-size:12px;color:var(--muted)}
+.chips{display:flex;gap:7px;flex-wrap:wrap;margin:10px 0}.chip{padding:7px 10px;border:1px solid var(--border);border-radius:999px;background:#fff;font-size:12px;font-weight:700}
+.dashboard{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.mini{padding:13px;background:#f8fafc;border-radius:10px}.mini b{font-size:20px}.progressbar{height:9px;background:#e8edf4;border-radius:99px;overflow:hidden}.progressbar i{display:block;height:100%;background:var(--primary);width:0}
+textarea.live{border:2px solid var(--primary)}
+@media(max-width:760px){.dashboard{grid-template-columns:1fr 1fr}}.word b{font-size:17px}.word span{color:var(--muted);font-size:14px}
+@media(max-width:760px){.grid{grid-template-columns:1fr}.controls{grid-template-columns:1fr 1fr}.stats{grid-template-columns:1fr 1fr}.header{align-items:flex-start}.tag{display:none}}
+</style>
+<link rel="manifest" href="manifest.webmanifest"></head>
+<body>
+<header><div class="header"><div><div class="logo">⌨️ StenoPro</div><div class="tag">English Stenography Practice</div></div><div id="clock">00:00</div></div></header>
+
+<div class="container">
+<div class="tabs">
+<button class="tab active" onclick="show('practice',this)">🎙️ Dictation</button>
+<button class="tab" onclick="show('transcription',this)">⌨️ Transcription</button>
+<button class="tab" onclick="show('custom',this)">🎧 My Audio</button>
+<button class="tab" onclick="show('blind',this)">🙈 Blind Typing</button>
+<button class="tab" onclick="show('vocab',this)">📚 Vocabulary</button>
+<button class="tab" onclick="show('progress',this)">📊 Progress</button>
+</div>
+
+<section id="practice">
+<div class="grid">
+<div class="card">
+<h2>English Steno Dictation</h2>
+<div class="controls">
+<div><label>SPEED</label><select id="speed"><option>60</option><option>80</option><option selected>100</option><option>120</option></select></div>
+<div><label>DURATION</label><select id="duration"><option value="60">1 min</option><option value="120">2 min</option><option value="180">3 min</option><option value="300">5 min</option></select></div>
+<div><label>LEVEL</label><select id="level"><option>General</option><option>Government</option><option>Legal</option></select></div>
+</div>
+<div class="timer" id="timer">01:00</div>
+<div class="passage" id="passage">Click <b>Start Dictation</b> to begin. Keep your shorthand notebook ready.</div>
+<br>
+<div class="actions"><button class="btn primary" onclick="startDictation()">▶ Start Dictation</button><button class="btn secondary" onclick="newPassage()">↻ New Passage</button><button class="btn danger" onclick="stopDictation()">■ Stop</button></div>
+</div>
+<div class="card">
+<h3>Today's Target</h3>
+<div class="stats">
+<div class="stat"><b id="dSpeed">100</b><span>Target WPM</span></div>
+<div class="stat"><b id="dCount">0</b><span>Dictations</span></div>
+<div class="stat"><b id="dBest">—</b><span>Best Accuracy</span></div>
+<div class="stat"><b id="dAvg">—</b><span>Avg Accuracy</span></div>
+</div>
+<hr>
+<p><b>How to practice</b></p>
+<p style="color:var(--muted)">Listen carefully, write shorthand, then move to Transcription and type exactly what you wrote.</p>
+</div>
+</div>
+</section>
+
+<section id="transcription" class="hidden">
+<div class="card">
+<h2>⌨️ Transcription Test</h2>
+<div class="passage" id="transPassage">Select a passage from the button below, then type your transcription in the box.</div><br>
+<div class="actions"><button class="btn secondary" onclick="loadTranscription()">Load Passage</button><button class="btn primary" onclick="finishTest()">✓ Check Result</button></div><br>
+<textarea id="typed" placeholder="Type your transcription here..."></textarea>
+<div id="result" class="result hidden"></div>
+</div>
+</section>
+
+
+<section id="custom" class="hidden">
+<div class="grid">
+<div class="card">
+<h2>🎧 My Audio Practice</h2>
+<p class="small">Apni dictation/recording upload karo, phir uska exact English matter neeche paste/type karo.</p>
+
+<label>AUDIO FILE</label>
+<input type="file" id="audioFile" accept="audio/*" onchange="loadAudio(this)">
+<br><br>
+<div class="audio-box" id="audioBox"><span class="small">No audio selected.</span></div>
+<div class="chips">
+<button class="chip" onclick="setPlayback(0.75)">0.75×</button>
+<button class="chip" onclick="setPlayback(1)">1×</button>
+<button class="chip" onclick="setPlayback(1.25)">1.25×</button>
+<button class="chip" onclick="setPlayback(1.5)">1.5×</button>
+<button class="chip" onclick="seekAudio(-5)">⏮ −5s</button>
+<button class="chip" onclick="seekAudio(5)">+5s ⏭</button>
+</div>
+
+<label>MODE</label>
+<select id="customMode">
+<option value="direct">Direct Typing — audio ke saath type</option>
+<option value="simulation">True Steno Simulation — audio ke dauran typing locked</option>
+</select>
+<br><br>
+<label>ENGLISH MATTER / ANSWER KEY</label>
+<textarea id="customAnswer" placeholder="Yahan woh exact English matter type/paste karo jo recording me bola gaya hai..."></textarea>
+
+<br>
+<div class="actions">
+<button class="btn primary" onclick="saveCustomPractice()">💾 Save Practice</button>
+<button class="btn secondary" onclick="startCustomTest()">▶ Start Test</button>
+<button class="btn secondary" onclick="savePracticeToLibrary()">＋ Save to Library</button>
+<button class="btn danger" onclick="clearCustomPractice()">Clear</button>
+</div>
+</div>
+
+<div class="card">
+<h3>⌨️ Your Transcription</h3>
+<p class="small">Audio sunte hue apni transcription yahan type karo. Complete hone ke baad Check Mistakes dabao.</p>
+<div class="dashboard">
+<div class="mini"><b id="liveTime">00:00</b><br><span class="small">Elapsed</span></div>
+<div class="mini"><b id="liveWpm">0</b><br><span class="small">Live WPM</span></div>
+<div class="mini"><b id="liveWords">0</b><br><span class="small">Words</span></div>
+</div>
+<br>
+<div class="progressbar"><i id="liveBar"></i></div><br>
+<textarea id="customTyped" placeholder="Type what you hear..." oninput="updateLiveStats()"></textarea>
+<br><br>
+<div class="actions">
+<button class="btn primary" onclick="checkCustomMistakes()">✓ Check Mistakes</button>
+<button class="btn secondary" onclick="clearCustomTyped()">↻ Clear Typing</button>
+<button class="btn secondary" onclick="showExamScore()">🏆 Exam Score</button>
+</div>
+<div id="customResult" class="result hidden"></div>
+<div id="diffBox" class="diff hidden"></div>
+<br>
+<h3>📚 My Practice Library</h3>
+<div id="practiceLibrary" class="small">No saved practices yet.</div>
+</div>
+</div>
+</section>
+
+
+<section id="blind" class="hidden">
+<div class="grid">
+<div class="card">
+<h2>🙈 Blind Typing Practice</h2>
+<p class="small">Pehle woh English matter yahan paste/type karo jo tumne audio se shorthand me likha tha. Practice ke waqt original matter screen par nahi dikhega.</p>
+<label>REFERENCE MATTER</label>
+<textarea id="blindAnswer" placeholder="Yahan exact English matter daalo..."></textarea>
+<br>
+<div class="actions">
+<button class="btn primary" onclick="startBlindPractice()">🙈 Hide Matter & Start</button>
+<button class="btn secondary" onclick="saveBlindMatter()">💾 Save Matter</button>
+<button class="btn danger" onclick="clearBlind()">Clear</button>
+</div>
+<br>
+<div id="blindStatus" class="blindSource">Matter hidden nahi hai. Start dabane ke baad answer screen se hide ho jayega.</div>
+</div>
+
+<div class="card">
+<h3>⌨️ Type Without Looking</h3>
+<p class="small">Ab bina original matter dekhe type karo. Jab complete ho, <b>Check My Mistakes</b> dabao.</p>
+<div class="dashboard">
+<div class="mini"><b id="blindTime">00:00</b><br><span class="small">Time</span></div>
+<div class="mini"><b id="blindWpm">0</b><br><span class="small">Live WPM</span></div>
+<div class="mini"><b id="blindWords">0</b><br><span class="small">Words</span></div>
+</div>
+<br>
+<textarea id="blindTyped" placeholder="Type the matter from memory..." disabled oninput="blindStats()"></textarea>
+<br><br>
+<div class="actions">
+<button class="btn primary" onclick="checkBlind()">✓ Check My Mistakes</button>
+<button class="btn secondary" onclick="revealBlind()">👁 Show Original</button>
+</div>
+<div id="blindResult" class="result hidden"></div>
+<div id="blindDiff" class="diff hidden"></div>
+</div>
+</div>
+</section>
+
+<section id="vocab" class="hidden">
+<div class="card"><h2>📚 Steno Vocabulary</h2><p style="color:var(--muted)">Useful words for government & legal stenography.</p><div id="words"></div></div>
+</section>
+
+<section id="progress" class="hidden">
+<div class="card"><h2>📊 My Progress</h2><div class="stats"><div class="stat"><b id="pTests">0</b><span>Tests</span></div><div class="stat"><b id="pBest">—</b><span>Best Accuracy</span></div><div class="stat"><b id="pAvg">—</b><span>Average Accuracy</span></div><div class="stat"><b id="pWords">0</b><span>Words Practiced</span></div></div><br>
+<table class="history"><thead><tr><th>Date</th><th>Accuracy</th><th>Errors</th><th>Words</th></tr></thead><tbody id="history"></tbody></table></div>
+</section>
+</div>
+
+<script>
+const passages=[
+"The government has taken several important measures to improve public services and ensure transparency in administration. Every citizen has the right to receive information and to participate in the development of the country.",
+"The court observed that justice must be delivered fairly and without unnecessary delay. The parties were directed to submit the required documents within the prescribed period and to comply with all directions issued by the authority.",
+"The department has decided to introduce a new system for maintaining official records. The objective is to reduce delays, improve efficiency and provide better services to the public."
+];
+const legal=["affidavit","authority","application","appointment","administration","amendment","circumstances","constitution","department","discretion","evidence","government","judgment","jurisdiction","notification","petition","prescribed","proceedings","representation","subsequently"];
+let current="",remaining=60,interval=null,started=false;
+
+function show(id,btn){document.querySelectorAll("section").forEach(x=>x.classList.add("hidden"));document.getElementById(id).classList.remove("hidden");document.querySelectorAll(".tab").forEach(x=>x.classList.remove("active"));btn.classList.add("active");if(id==="progress")renderProgress()}
+function newPassage(){current=passages[Math.floor(Math.random()*passages.length)];document.getElementById("passage").textContent=current}
+function startDictation(){
+newPassage(); remaining=+document.getElementById("duration").value; started=true; clearInterval(interval); updateTimer();
+if("speechSynthesis" in window){let u=new SpeechSynthesisUtterance(current);u.lang="en-IN";u.rate=Math.max(.55,Math.min(1.15,+document.getElementById("speed").value/100));speechSynthesis.cancel();speechSynthesis.speak(u)}
+interval=setInterval(()=>{remaining--;updateTimer();if(remaining<=0)stopDictation()},1000)
+}
+function updateTimer(){let m=String(Math.floor(remaining/60)).padStart(2,"0"),s=String(remaining%60).padStart(2,"0");document.getElementById("timer").textContent=m+":"+s}
+function stopDictation(){clearInterval(interval);interval=null;if("speechSynthesis" in window)speechSynthesis.cancel();started=false}
+function loadTranscription(){current=passages[Math.floor(Math.random()*passages.length)];document.getElementById("transPassage").textContent="Passage loaded. Type your transcription below.";document.getElementById("typed").value="";document.getElementById("typed").focus();document.getElementById("transPassage").dataset.answer=current}
+function normalize(s){return s.toLowerCase().replace(/[^a-z0-9\s]/g,"").replace(/\s+/g," ").trim()}
+function finishTest(){
+let answer=document.getElementById("transPassage").dataset.answer||current;if(!answer){loadTranscription();answer=document.getElementById("transPassage").dataset.answer}
+let a=normalize(answer).split(" "),b=normalize(document.getElementById("typed").value).split(" ");let n=Math.max(a.length,b.length),correct=0;
+for(let i=0;i<n;i++)if(a[i]&&a[i]===b[i])correct++;
+let acc=n?correct/n*100:0,errors=n-correct;
+let data=JSON.parse(localStorage.getItem("stenoHistory")||"[]");data.push({date:new Date().toLocaleString(),acc,errors,words:b.filter(Boolean).length});localStorage.setItem("stenoHistory",JSON.stringify(data));
+document.getElementById("result").classList.remove("hidden");document.getElementById("result").innerHTML=`<b>${acc>=90?"✅ Excellent":"📌 Keep Practicing"}</b><br>Accuracy: <b>${acc.toFixed(1)}%</b> &nbsp; Errors: <b>${errors}</b> &nbsp; Words: <b>${b.filter(Boolean).length}</b>`;
+}
+function renderVocab(){document.getElementById("words").innerHTML=legal.map((w,i)=>`<div class="word"><b>${i+1}. ${w}</b><br><span>${meaning(w)}</span></div>`).join("")}
+function meaning(w){let m={affidavit:"a written statement confirmed by oath",authority:"official power or right to make decisions",application:"a formal request",appointment:"an arrangement to meet or assign someone",administration:"management of public or official affairs",amendment:"a change made to a document or law",circumstances:"conditions affecting a situation",constitution:"fundamental principles of a country",department:"a division of an organization or government",discretion:"freedom to decide according to judgment",evidence:"information used to prove something",government:"system that manages a country",judgment:"decision given by a court",jurisdiction:"official power to make legal decisions",notification:"formal official announcement",petition:"formal written request to an authority",prescribed:"officially fixed or required",proceedings:"legal or official actions",representation:"act of speaking or acting for someone",subsequently:"afterward or later"};return m[w]}
+function renderProgress(){let d=JSON.parse(localStorage.getItem("stenoHistory")||"[]");let avg=d.length?d.reduce((x,y)=>x+y.acc,0)/d.length:0,best=d.length?Math.max(...d.map(x=>x.acc)):0;document.getElementById("pTests").textContent=d.length;document.getElementById("pBest").textContent=d.length?best.toFixed(1)+"%":"—";document.getElementById("pAvg").textContent=d.length?avg.toFixed(1)+"%":"—";document.getElementById("pWords").textContent=d.reduce((x,y)=>x+y.words,0);document.getElementById("history").innerHTML=d.slice().reverse().map(x=>`<tr><td>${x.date}</td><td>${x.acc.toFixed(1)}%</td><td>${x.errors}</td><td>${x.words}</td></tr>`).join("")}
+document.getElementById("speed").onchange=e=>document.getElementById("dSpeed").textContent=e.target.value;
+newPassage();renderVocab();renderProgress();
+
+let customAudioURL = null;
+
+function loadAudio(input){
+  const file = input.files && input.files[0];
+  if(!file) return;
+  if(customAudioURL) URL.revokeObjectURL(customAudioURL);
+  customAudioURL = URL.createObjectURL(file);
+  document.getElementById("audioBox").innerHTML =
+    `<audio id="customAudio" controls preload="metadata" src="${customAudioURL}"></audio>`;
+}
+
+function saveCustomPractice(){
+  const answer = document.getElementById("customAnswer").value.trim();
+  if(!answer){ alert("Pehle English matter type/paste karo."); return; }
+  localStorage.setItem("customStenoAnswer", answer);
+  alert("Practice matter save ho gaya ✅");
+}
+
+function startCustomTest(){
+  const answer = document.getElementById("customAnswer").value.trim();
+  if(!answer){ alert("English matter add karo."); return; }
+  document.getElementById("customTyped").value = "";
+  document.getElementById("customTyped").focus();
+  const audio = document.getElementById("customAudio");
+  if(audio){ audio.currentTime = 0; audio.play().catch(()=>{}); }
+}
+
+function normalizeWords(s){
+  return s.toLowerCase()
+    .replace(/[“”‘’]/g,"'")
+    .replace(/[^a-z0-9'\s]/g," ")
+    .replace(/\s+/g," ")
+    .trim()
+    .split(" ")
+    .filter(Boolean);
+}
+
+function escapeHTML(s){
+  return s.replace(/[&<>"']/g, c => ({
+    "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"
+  }[c]));
+}
+
+function checkCustomMistakes(){
+  const answer = document.getElementById("customAnswer").value.trim();
+  const typed = document.getElementById("customTyped").value.trim();
+  if(!answer){ alert("English matter add karo."); return; }
+  if(!typed){ alert("Pehle transcription type karo."); return; }
+
+  const a = normalizeWords(answer);
+  const b = normalizeWords(typed);
+
+  // Word-level alignment using dynamic programming
+  const dp = Array.from({length:a.length+1},()=>Array(b.length+1).fill(0));
+  for(let i=a.length;i>=0;i--){
+    for(let j=b.length;j>=0;j--){
+      if(i===a.length) dp[i][j]=b.length-j;
+      else if(j===b.length) dp[i][j]=a.length-i;
+      else dp[i][j] = a[i]===b[j] ? dp[i+1][j+1] :
+        1 + Math.min(dp[i+1][j], dp[i][j+1], dp[i+1][j+1]);
+    }
+  }
+
+  let i=0,j=0,correct=0,errors=0, htmlOut=[];
+  while(i<a.length || j<b.length){
+    if(i<a.length && j<b.length && a[i]===b[j]){
+      htmlOut.push(`<span class="correct">${escapeHTML(b[j])}</span>`);
+      correct++; i++; j++;
+    } else {
+      const del = i<a.length ? dp[i+1][j] : Infinity;
+      const ins = j<b.length ? dp[i][j+1] : Infinity;
+      const sub = (i<a.length&&j<b.length) ? dp[i+1][j+1] : Infinity;
+      const best = Math.min(del,ins,sub);
+
+      if(best===sub){
+        htmlOut.push(`<span class="wrong" title="Expected: ${escapeHTML(a[i])}">${escapeHTML(b[j])}</span>`);
+        errors++; i++; j++;
+      } else if(best===del){
+        htmlOut.push(`<span class="missing" title="Missing word: ${escapeHTML(a[i])}">[${escapeHTML(a[i])}]</span>`);
+        errors++; i++;
+      } else {
+        htmlOut.push(`<span class="wrong" title="Extra word">${escapeHTML(b[j])}</span>`);
+        errors++; j++;
+      }
+    }
+  }
+
+  const total = Math.max(a.length,b.length);
+  const accuracy = total ? (correct/total)*100 : 0;
+  const wpm = b.length; // displayed as words typed; actual WPM needs test duration
+  const result = document.getElementById("customResult");
+  result.classList.remove("hidden");
+  result.innerHTML = `<b>${accuracy>=90?"✅ Excellent":"📌 Keep Practicing"}</b><br>
+    Accuracy: <b>${accuracy.toFixed(1)}%</b> &nbsp; 
+    Correct: <b>${correct}</b> &nbsp; 
+    Mistakes: <b>${errors}</b> &nbsp; 
+    Typed Words: <b>${wpm}</b>`;
+
+  const diff = document.getElementById("diffBox");
+  diff.classList.remove("hidden");
+  diff.innerHTML = `<b>Mistake Check</b><br><span class="small">Green = correct &nbsp; Red = wrong/extra &nbsp; Yellow = missing word</span><br><br>${htmlOut.join(" ")}`;
+}
+
+function clearCustomTyped(){
+  document.getElementById("customTyped").value="";
+  document.getElementById("customResult").classList.add("hidden");
+  document.getElementById("diffBox").classList.add("hidden");
+}
+
+function clearCustomPractice(){
+  document.getElementById("audioFile").value="";
+  document.getElementById("customAnswer").value="";
+  document.getElementById("customTyped").value="";
+  document.getElementById("audioBox").innerHTML='<span class="small">No audio selected.</span>';
+  document.getElementById("customResult").classList.add("hidden");
+  document.getElementById("diffBox").classList.add("hidden");
+  if(customAudioURL){ URL.revokeObjectURL(customAudioURL); customAudioURL=null; }
+}
+
+(function restoreCustomAnswer(){
+  const saved = localStorage.getItem("customStenoAnswer");
+  if(saved) document.getElementById("customAnswer").value = saved;
+})();
+
+
+let customStartedAt = null, customTimer = null, customDuration = 0;
+let customLocked = false;
+
+function getAudio(){
+  return document.getElementById("customAudio");
+}
+function setPlayback(rate){
+  const a=getAudio(); if(a) a.playbackRate=rate;
+}
+function seekAudio(sec){
+  const a=getAudio(); if(a) a.currentTime=Math.max(0,Math.min(a.duration||0,a.currentTime+sec));
+}
+function startCustomTest(){
+  const answer=document.getElementById("customAnswer").value.trim();
+  const a=getAudio();
+  if(!answer){alert("English matter add karo.");return;}
+  if(!a){alert("Pehle audio upload karo.");return;}
+  document.getElementById("customTyped").value="";
+  document.getElementById("customResult").classList.add("hidden");
+  document.getElementById("diffBox").classList.add("hidden");
+  customStartedAt=Date.now(); customDuration=0;
+  clearInterval(customTimer);
+  customTimer=setInterval(updateLiveStats,250);
+  const mode=document.getElementById("customMode").value;
+  customLocked=(mode==="simulation");
+  const box=document.getElementById("customTyped");
+  box.disabled=customLocked;
+  box.classList.toggle("live",!customLocked);
+  a.currentTime=0;
+  a.onplay=()=>{ if(customLocked) box.disabled=true; };
+  a.onended=()=>{ box.disabled=false; customLocked=false; updateLiveStats(); clearInterval(customTimer); };
+  a.play().catch(()=>{});
+  updateLiveStats();
+}
+
+function updateLiveStats(){
+  if(!customStartedAt)return;
+  customDuration=(Date.now()-customStartedAt)/1000;
+  const sec=Math.max(1,customDuration), words=normalizeWords(document.getElementById("customTyped").value).length;
+  const wpm=words/(sec/60);
+  document.getElementById("liveTime").textContent=
+    String(Math.floor(sec/60)).padStart(2,"0")+":"+String(Math.floor(sec%60)).padStart(2,"0");
+  document.getElementById("liveWpm").textContent=isFinite(wpm)?wpm.toFixed(0):"0";
+  document.getElementById("liveWords").textContent=words;
+  const a=getAudio();
+  if(a && a.duration) document.getElementById("liveBar").style.width=((a.currentTime/a.duration)*100).toFixed(1)+"%";
+}
+
+function showExamScore(){
+  const answer=document.getElementById("customAnswer").value.trim();
+  const typed=document.getElementById("customTyped").value.trim();
+  if(!answer||!typed){alert("Matter aur transcription dono chahiye.");return;}
+  const a=normalizeWords(answer), b=normalizeWords(typed);
+  let correct=0;
+  for(let i=0;i<Math.min(a.length,b.length);i++) if(a[i]===b[i]) correct++;
+  const total=Math.max(a.length,b.length), accuracy=total?correct/total*100:0;
+  const typedWpm=customDuration?b.length/(customDuration/60):0;
+  const rawErrors=total-correct;
+  // A practical configurable score model: 1 mark deducted per error.
+  const score=Math.max(0,100-rawErrors);
+  const result=document.getElementById("customResult");
+  result.classList.remove("hidden");
+  result.innerHTML=`<b>🏆 Practice Exam Score</b><br>
+  Score: <b>${score}/100</b> &nbsp; Accuracy: <b>${accuracy.toFixed(1)}%</b><br>
+  Speed: <b>${typedWpm.toFixed(1)} WPM</b> &nbsp; Errors: <b>${rawErrors}</b>`;
+}
+
+function savePracticeToLibrary(){
+  const answer=document.getElementById("customAnswer").value.trim();
+  if(!answer){alert("Matter add karo.");return;}
+  const name=prompt("Practice ka naam likho:", "My Dictation");
+  if(!name)return;
+  const lib=JSON.parse(localStorage.getItem("stenoLibrary")||"[]");
+  lib.push({name,answer,created:new Date().toLocaleString()});
+  localStorage.setItem("stenoLibrary",JSON.stringify(lib));
+  renderLibrary();
+}
+function loadLibraryItem(i){
+  const lib=JSON.parse(localStorage.getItem("stenoLibrary")||"[]");
+  if(!lib[i])return;
+  document.getElementById("customAnswer").value=lib[i].answer;
+  alert("Practice load ho gayi ✅");
+}
+function deleteLibraryItem(i){
+  const lib=JSON.parse(localStorage.getItem("stenoLibrary")||"[]");
+  lib.splice(i,1);localStorage.setItem("stenoLibrary",JSON.stringify(lib));renderLibrary();
+}
+function renderLibrary(){
+  const lib=JSON.parse(localStorage.getItem("stenoLibrary")||"[]");
+  const el=document.getElementById("practiceLibrary");
+  if(!lib.length){el.innerHTML="No saved practices yet.";return;}
+  el.innerHTML=lib.map((x,i)=>`<div class="word"><b>${escapeHTML(x.name)}</b><br>
+  <span>${escapeHTML(x.created)} · ${normalizeWords(x.answer).length} words</span><br>
+  <button class="btn secondary" onclick="loadLibraryItem(${i})">Load</button>
+  <button class="btn danger" onclick="deleteLibraryItem(${i})">Delete</button></div>`).join("");
+}
+renderLibrary();
+
+</script>
+<script>
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => navigator.serviceWorker.register('./sw.js').catch(()=>{}));
+}
+</script></body>
+</html>
