@@ -1,0 +1,8 @@
+{
+  "name": "StenoPro Premium V3",
+  "short_name": "StenoPro",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#f5f7fb",
+  "theme_color": "#315efb"
+}
