@@ -22,27 +22,63 @@ select,input,textarea{width:100%;padding:11px;border:1px solid var(--border);bor
 textarea{min-height:220px;resize:vertical;line-height:1.6}.result{margin-top:15px;padding:16px;border-radius:12px;background:#eefbf4;border:1px solid #bfe8d0}.hidden{display:none}.history{width:100%;border-collapse:collapse}.history th,.history td{padding:10px;border-bottom:1px solid var(--border);text-align:left;font-size:13px}
 .audio-box{display:flex;gap:10px;align-items:center;flex-wrap:wrap}.audio-box audio{width:min(100%,520px)}
 .diff{margin-top:15px;padding:16px;border:1px solid var(--border);border-radius:12px;line-height:1.8;background:#f8fafc}
-.blindSource{font-size:12px;color:var(--muted);background:#f8fafc;border:1px dashed var(--border);padding:10px;border-radius:9px}.correct{background:#dff6e8;border-radius:4px;padding:1px 3px}.wrong{background:#ffe2df;border-radius:4px;padding:1px 3px;text-decoration:underline;text-decoration-color:#d93025}
+.correct{background:#dff6e8;border-radius:4px;padding:1px 3px}.wrong{background:#ffe2df;border-radius:4px;padding:1px 3px;text-decoration:underline;text-decoration-color:#d93025}
 .missing{background:#fff0c9;border-radius:4px;padding:1px 3px}.small{font-size:12px;color:var(--muted)}
 .chips{display:flex;gap:7px;flex-wrap:wrap;margin:10px 0}.chip{padding:7px 10px;border:1px solid var(--border);border-radius:999px;background:#fff;font-size:12px;font-weight:700}
 .dashboard{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.mini{padding:13px;background:#f8fafc;border-radius:10px}.mini b{font-size:20px}.progressbar{height:9px;background:#e8edf4;border-radius:99px;overflow:hidden}.progressbar i{display:block;height:100%;background:var(--primary);width:0}
 textarea.live{border:2px solid var(--primary)}
 @media(max-width:760px){.dashboard{grid-template-columns:1fr 1fr}}.word b{font-size:17px}.word span{color:var(--muted);font-size:14px}
 @media(max-width:760px){.grid{grid-template-columns:1fr}.controls{grid-template-columns:1fr 1fr}.stats{grid-template-columns:1fr 1fr}.header{align-items:flex-start}.tag{display:none}}
+
+/* ===== StenoPro Premium V1 ===== */
+:root{--primary:#315efb;--bg:#f5f7fb}
+body{background:radial-gradient(circle at top right,#edf2ff 0,#f5f7fb 40%,#f5f7fb 100%)}
+header{background:linear-gradient(135deg,#101a38,#315efb 55%,#6d4aff);box-shadow:0 8px 30px #1d2a6318}
+.premium-badge{display:inline-flex;background:#ffffff22;border:1px solid #ffffff44;padding:5px 9px;border-radius:99px;font-size:11px;font-weight:800;margin-top:7px}
+.hero{display:grid;grid-template-columns:1.4fr .6fr;gap:16px;margin-bottom:18px}
+.hero-main{background:linear-gradient(135deg,#fff,#eef3ff);border:1px solid #dfe7ff;border-radius:18px;padding:24px}
+.hero h1{font-size:32px;margin:0 0 7px}.hero p{color:var(--muted)}
+.metric-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}.metric{background:#ffffffb8;border:1px solid #e6ebf6;border-radius:13px;padding:13px}.metric b{display:block;font-size:22px}.metric span{font-size:11px;color:var(--muted)}
+.quick{display:grid;grid-template-columns:1fr 1fr;gap:10px}.quick button{min-height:82px;text-align:left;border:1px solid var(--border);background:#fff;border-radius:14px;padding:14px;cursor:pointer;font-weight:800}.quick small{display:block;color:var(--muted);font-weight:500;margin-top:4px}
+.section-title{display:flex;justify-content:space-between;align-items:center}.kpi{font-size:12px;background:#eef3ff;color:#315efb;border-radius:99px;padding:6px 9px;font-weight:800}
+.chart{height:130px;display:flex;align-items:flex-end;gap:7px;padding:15px 5px 0;border-bottom:1px solid var(--border)}.bar{flex:1;background:linear-gradient(180deg,#6d4aff,#315efb);border-radius:7px 7px 0 0;position:relative}.bar span{position:absolute;bottom:-22px;left:50%;transform:translateX(-50%);font-size:9px;color:var(--muted)}
+.exam-card{background:linear-gradient(135deg,#101a38,#263f93);color:#fff;border:0}.exam-card .small{color:#dbe5ff}.exam-card .kpi{background:#ffffff1c;color:#fff}.streak{font-size:34px;font-weight:900}
+@media(max-width:760px){.hero{grid-template-columns:1fr}.metric-grid{grid-template-columns:1fr 1fr}.hero h1{font-size:26px}}
 </style>
-<link rel="manifest" href="manifest.webmanifest"></head>
+</head>
 <body>
-<header><div class="header"><div><div class="logo">⌨️ StenoPro</div><div class="tag">English Stenography Practice</div></div><div id="clock">00:00</div></div></header>
+<header><div class="header"><div><div class="logo">⌨️ StenoPro</div><div class="tag">English Stenography Practice</div><div class="premium-badge">✦ PREMIUM V1</div></div><div id="clock">00:00</div></div></header>
 
 <div class="container">
 <div class="tabs">
-<button class="tab active" onclick="show('practice',this)">🎙️ Dictation</button>
+<button class="tab active" onclick="show('dashboard',this)">🏠 Dashboard</button>
+<button class="tab" onclick="show('practice',this)">🎙️ Dictation</button>
 <button class="tab" onclick="show('transcription',this)">⌨️ Transcription</button>
 <button class="tab" onclick="show('custom',this)">🎧 My Audio</button>
-<button class="tab" onclick="show('blind',this)">🙈 Blind Typing</button>
 <button class="tab" onclick="show('vocab',this)">📚 Vocabulary</button>
+<button class="tab" onclick="show('exam',this)">🏆 Exam Mode</button>
 <button class="tab" onclick="show('progress',this)">📊 Progress</button>
 </div>
+
+
+<section id="dashboard">
+<div class="hero">
+<div class="hero-main"><h1>Master Your Steno Speed.</h1><p>Your personal English stenography training dashboard.</p>
+<div class="actions"><button class="btn primary" onclick="goTab('practice')">🎙️ Start Dictation</button><button class="btn secondary" onclick="goTab('blind')">🙈 Blind Practice</button></div><br>
+<div class="metric-grid"><div class="metric"><b id="dashTests">0</b><span>Tests</span></div><div class="metric"><b id="dashBest">—</b><span>Best Accuracy</span></div><div class="metric"><b id="dashAvg">—</b><span>Average Accuracy</span></div><div class="metric"><b id="dashWords">0</b><span>Words Typed</span></div></div></div>
+<div class="card exam-card"><div class="section-title"><h3>🔥 Daily Challenge</h3><span class="kpi">100 WPM</span></div><div class="streak" id="streak">0 🔥</div><p class="small">Practice today to keep your streak alive.</p><button class="btn" style="background:#fff;color:#183276" onclick="startDaily()">Start Challenge →</button></div>
+</div>
+<div class="grid">
+<div class="card"><div class="section-title"><h3>📈 Accuracy Trend</h3><span class="kpi">Last 10</span></div><div class="chart" id="accuracyChart"></div></div>
+<div class="card"><div class="section-title"><h3>🎯 Today's Target</h3><span class="kpi">Goal</span></div><div style="font-size:28px;font-weight:900;margin:10px 0">100 WPM</div><div class="progressbar"><i id="goalBar"></i></div><p class="small" id="goalText">Complete a practice test to update progress.</p></div>
+</div><br>
+<div class="card"><div class="section-title"><h3>⚡ Quick Practice</h3><span class="small">One tap</span></div><br><div class="quick">
+<button onclick="setAndStart(80)">🟢 80 WPM<small>Accuracy & control</small></button>
+<button onclick="setAndStart(100)">🔵 100 WPM<small>Core exam practice</small></button>
+<button onclick="setAndStart(120)">🟣 120 WPM<small>Speed training</small></button>
+<button onclick="goTab('custom')">🎧 My Audio<small>Own dictation</small></button>
+</div></div>
+</section>
 
 <section id="practice">
 <div class="grid">
@@ -147,48 +183,21 @@ textarea.live{border:2px solid var(--primary)}
 </div>
 </section>
 
-
-<section id="blind" class="hidden">
-<div class="grid">
-<div class="card">
-<h2>🙈 Blind Typing Practice</h2>
-<p class="small">Pehle woh English matter yahan paste/type karo jo tumne audio se shorthand me likha tha. Practice ke waqt original matter screen par nahi dikhega.</p>
-<label>REFERENCE MATTER</label>
-<textarea id="blindAnswer" placeholder="Yahan exact English matter daalo..."></textarea>
-<br>
-<div class="actions">
-<button class="btn primary" onclick="startBlindPractice()">🙈 Hide Matter & Start</button>
-<button class="btn secondary" onclick="saveBlindMatter()">💾 Save Matter</button>
-<button class="btn danger" onclick="clearBlind()">Clear</button>
-</div>
-<br>
-<div id="blindStatus" class="blindSource">Matter hidden nahi hai. Start dabane ke baad answer screen se hide ho jayega.</div>
-</div>
-
-<div class="card">
-<h3>⌨️ Type Without Looking</h3>
-<p class="small">Ab bina original matter dekhe type karo. Jab complete ho, <b>Check My Mistakes</b> dabao.</p>
-<div class="dashboard">
-<div class="mini"><b id="blindTime">00:00</b><br><span class="small">Time</span></div>
-<div class="mini"><b id="blindWpm">0</b><br><span class="small">Live WPM</span></div>
-<div class="mini"><b id="blindWords">0</b><br><span class="small">Words</span></div>
-</div>
-<br>
-<textarea id="blindTyped" placeholder="Type the matter from memory..." disabled oninput="blindStats()"></textarea>
-<br><br>
-<div class="actions">
-<button class="btn primary" onclick="checkBlind()">✓ Check My Mistakes</button>
-<button class="btn secondary" onclick="revealBlind()">👁 Show Original</button>
-</div>
-<div id="blindResult" class="result hidden"></div>
-<div id="blindDiff" class="diff hidden"></div>
-</div>
-</div>
-</section>
-
 <section id="vocab" class="hidden">
 <div class="card"><h2>📚 Steno Vocabulary</h2><p style="color:var(--muted)">Useful words for government & legal stenography.</p><div id="words"></div></div>
 </section>
+
+
+<section id="exam" class="hidden"><div class="card"><h2>🏆 Steno Exam Simulator</h2>
+<div class="alert">Practice simulator — not an official exam scoring system.</div><br>
+<div class="controls"><div><label>DICTATION SPEED</label><select id="examSpeed"><option>80</option><option selected>100</option><option>120</option></select></div>
+<div><label>DICTATION</label><select id="examDuration"><option value="60">1 min</option><option value="300">5 min</option><option value="600" selected>10 min</option></select></div>
+<div><label>PASS TARGET</label><select id="examTarget"><option value="90">90%</option><option value="95" selected>95%</option><option value="98">98%</option></select></div></div>
+<div class="actions"><button class="btn primary" onclick="startExam()">▶ Start Exam</button><button class="btn danger" onclick="stopExam()">■ Stop</button></div><br>
+<div class="timer" id="examTimer">10:00</div><div class="passage" id="examPassage">Start when ready.</div><br>
+<textarea id="examTyped" class="live" placeholder="After dictation, type your transcription here..." disabled></textarea><br><br>
+<button class="btn primary" onclick="finishExam()">✓ Submit Exam</button><div id="examResult" class="result hidden"></div>
+</div></section>
 
 <section id="progress" class="hidden">
 <div class="card"><h2>📊 My Progress</h2><div class="stats"><div class="stat"><b id="pTests">0</b><span>Tests</span></div><div class="stat"><b id="pBest">—</b><span>Best Accuracy</span></div><div class="stat"><b id="pAvg">—</b><span>Average Accuracy</span></div><div class="stat"><b id="pWords">0</b><span>Words Practiced</span></div></div><br>
@@ -453,10 +462,28 @@ function renderLibrary(){
 }
 renderLibrary();
 
+
+function goTab(id){const b=[...document.querySelectorAll(".tab")].find(x=>(x.getAttribute("onclick")||"").includes("'"+id+"'"));if(b)show(id,b)}
+function setAndStart(speed){goTab("practice");const s=document.getElementById("speed");if(s){s.value=speed;s.dispatchEvent(new Event("change"))}if(typeof startDictation==="function")startDictation()}
+function startDaily(){setAndStart(100)}
+function hist(){return JSON.parse(localStorage.getItem("stenoHistory")||"[]")}
+function renderPremiumDashboard(){const d=hist(),avg=d.length?d.reduce((a,x)=>a+x.acc,0)/d.length:0,best=d.length?Math.max(...d.map(x=>x.acc)):0;
+document.getElementById("dashTests").textContent=d.length;document.getElementById("dashBest").textContent=d.length?best.toFixed(1)+"%":"—";document.getElementById("dashAvg").textContent=d.length?avg.toFixed(1)+"%":"—";document.getElementById("dashWords").textContent=d.reduce((a,x)=>a+(x.words||0),0);
+const c=document.getElementById("accuracyChart"),r=d.slice(-10);c.innerHTML=r.length?r.map(x=>`<div class="bar" style="height:${Math.max(8,Math.min(100,x.acc))}%"><span>${x.acc.toFixed(0)}%</span></div>`).join(""):'<span class="small">Complete a test to see your trend.</span>';
+document.getElementById("goalBar").style.width=Math.min(100,d.length/5*100)+"%";document.getElementById("goalText").textContent=d.length>=5?"Daily target reached 🔥":`${d.length}/5 practice tests completed.`;
+let streak=+(localStorage.getItem("stenoStreak")||0),last=localStorage.getItem("lastPracticeDate"),today=new Date().toDateString();
+if(d.length&&last!==today){if(last){let diff=Math.round((new Date(today)-new Date(last))/86400000);streak=diff===1?streak+1:1}else streak=1;localStorage.setItem("lastPracticeDate",today);localStorage.setItem("stenoStreak",streak)}
+document.getElementById("streak").textContent=(streak||0)+" 🔥"}
+let examTimerId=null,examAnswer="",examStart=0,examLeft=600;
+function startExam(){const sp=+document.getElementById("examSpeed").value;examLeft=+document.getElementById("examDuration").value;examAnswer=(typeof passages!=="undefined"&&passages.length)?passages[Math.floor(Math.random()*passages.length)]:"This is a premium steno practice dictation for improving speed accuracy and transcription skills.";examStart=Date.now();document.getElementById("examPassage").textContent="🎙️ Dictation in progress…";document.getElementById("examTyped").value="";document.getElementById("examTyped").disabled=true;
+if("speechSynthesis"in window){let u=new SpeechSynthesisUtterance(examAnswer);u.lang="en-IN";u.rate=Math.max(.55,Math.min(1.15,sp/100));speechSynthesis.cancel();speechSynthesis.speak(u)}
+clearInterval(examTimerId);examTimerId=setInterval(()=>{examLeft--;document.getElementById("examTimer").textContent=String(Math.floor(examLeft/60)).padStart(2,"0")+":"+String(examLeft%60).padStart(2,"0");if(examLeft<=0){stopExam();document.getElementById("examTyped").disabled=false;document.getElementById("examPassage").textContent="Dictation finished. Type transcription now.";document.getElementById("examTyped").focus()}},1000)}
+function stopExam(){clearInterval(examTimerId);if("speechSynthesis"in window)speechSynthesis.cancel()}
+function finishExam(){if(!examAnswer)return alert("Start the exam first.");let t=document.getElementById("examTyped").value.trim();if(!t)return alert("Please type your transcription.");let a=normalizeWords(examAnswer),b=normalizeWords(t),c=0;for(let i=0;i<Math.min(a.length,b.length);i++)if(a[i]===b[i])c++;let total=Math.max(a.length,b.length),acc=total?c/total*100:0,err=total-c,sec=Math.max(1,(Date.now()-examStart)/1000),wpm=b.length/(sec/60),target=+document.getElementById("examTarget").value;
+let r=document.getElementById("examResult");r.classList.remove("hidden");r.innerHTML=`<b>${acc>=target?"🏆 PASS — Great Work!":"📌 KEEP PRACTICING"}</b><br>Accuracy: <b>${acc.toFixed(1)}%</b> · Speed: <b>${wpm.toFixed(1)} WPM</b> · Errors: <b>${err}</b> · Target: <b>${target}%</b>`;
+let h=hist();h.push({date:new Date().toLocaleString(),acc,errors:err,words:b.length});localStorage.setItem("stenoHistory",JSON.stringify(h));renderPremiumDashboard()}
+if(document.getElementById("dashTests"))renderPremiumDashboard();
+
 </script>
-<script>
-if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => navigator.serviceWorker.register('./sw.js').catch(()=>{}));
-}
-</script></body>
+</body>
 </html>
