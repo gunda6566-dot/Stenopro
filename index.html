@@ -34,7 +34,7 @@ button,input,select,textarea{font:inherit}.app{display:flex;min-height:100vh}.si
 <button data-view="tests">🏆 Tests</button>
 <button data-view="mistakes">🧠 My Mistakes</button>
 <button data-view="progress">📊 Progress</button>
-<button data-view="admin">👑 Admin</button>
+<button data-view="importer">🎧 Audio → Matter</button><button data-view="admin">👑 Admin</button>
 </nav>
 </aside>
 <main class="main">
@@ -70,6 +70,35 @@ button,input,select,textarea{font:inherit}.app{display:flex;min-height:100vh}.si
 
 <section id="progress" class="view"><div class="card"><h2>📊 My Progress</h2><table class="table"><thead><tr><th>Date</th><th>WPM</th><th>Accuracy</th><th>Errors</th><th>Words</th></tr></thead><tbody id="history"></tbody></table></div></section>
 
+
+<section id="importer" class="view">
+<div class="card">
+<h2>🎧 Audio → English Matter</h2>
+<p class="muted">Upload your own/authorized dictation audio. The browser will transcribe speech when Speech Recognition is available, then you can edit and save the matter for practice.</p>
+<div class="controls">
+<div><label>AUDIO FILE</label><input id="audioFile" type="file" accept="audio/*"></div>
+<div><label>LANGUAGE</label><select id="srLang"><option value="en-IN">English (India)</option><option value="en-GB">English (UK)</option><option value="en-US">English (US)</option></select></div>
+<div><label>WPM TAG</label><select id="importWpm"><option>80</option><option>100</option><option>120</option><option>140</option></select></div>
+</div>
+<div id="audioBox" class="status">Choose an audio file. Only use audio you own or are authorized to reuse.</div>
+<div class="actions" style="margin-top:10px">
+<button class="btn blue" onclick="startAudioTranscription()">🎙️ Start Speech-to-Text</button>
+<button class="btn" onclick="stopAudioTranscription()">⏹ Stop</button>
+<button class="btn" onclick="playUploadedAudio()">▶ Play Audio</button>
+</div>
+<div style="margin-top:14px">
+<label><b>📝 Generated English Matter</b></label>
+<textarea id="generatedMatter" class="textarea" placeholder="Speech-to-text will appear here. You can correct it before saving."></textarea>
+</div>
+<div class="actions" style="margin-top:10px">
+<input id="generatedTitle" placeholder="Matter title" style="padding:11px;border:1px solid #dce3ef;border-radius:9px">
+<button class="btn dark" onclick="saveImportedMatter()">💾 Save to My Matters</button>
+<button class="btn" onclick="useImportedForPractice()">⌨️ Practice This Matter</button>
+</div>
+<div id="srStatus" class="status">Speech-to-text status: Ready.</div>
+</div>
+</section>
+
 <section id="admin" class="view"><div class="card"><h2>👑 Admin / Content Manager</h2><p class="muted">Demo local admin panel for this standalone V3 build. For real multi-user secure access, connect authentication and a server database.</p><div class="controls"><div><label>MATTER TITLE</label><input id="adminTitle" placeholder="My Legal Matter"></div><div><label>WPM</label><select id="adminWpm"><option>80</option><option>100</option><option>120</option><option>140</option></select></div></div><textarea id="adminText" class="textarea" placeholder="Paste your matter..."></textarea><button class="btn blue" style="margin-top:10px" onclick="saveCustom()">Save to My Matters</button><div id="customList" style="margin-top:12px"></div></div></section>
 </main></div>
 
@@ -98,6 +127,54 @@ function renderHistory(){let h=JSON.parse(localStorage.getItem("spHistory")||"[]
 function updateStats(){let h=JSON.parse(localStorage.getItem("spHistory")||"[]");$("statTests").textContent=h.length;$("statAcc").textContent=h.length?Math.max(...h.map(x=>x.acc)).toFixed(1)+"%":"—";$("statWpm").textContent=h.length?Math.max(...h.map(x=>x.wpm)):"—";$("statStreak").textContent=(h.length?Math.min(h.length,30):0)+" 🔥"}
 function newPractice(clear=true){stopSpeech();if(clear)$("typed").value="";$("diff").textContent="Submit your transcription to see mistakes.";["acc","wpm","errors","correct"].forEach(x=>$(x).textContent="—");$("matter").style.visibility="visible"}
 function startTest(){let m=matters[Math.floor(Math.random()*matters.length)];$("matter").value=m.text;$("speed").value=$("testSpeed").value;$("mode").value="blind";openView("lab");$("testStatus").textContent="Test loaded in Transcription Lab. Press Start Dictation.";speak()}
+
+let uploadedAudioURL=null, recognition=null, recognizing=false;
+$("audioFile").addEventListener("change",e=>{
+  const f=e.target.files[0]; if(!f)return;
+  if(uploadedAudioURL) URL.revokeObjectURL(uploadedAudioURL);
+  uploadedAudioURL=URL.createObjectURL(f);
+  $("audioBox").innerHTML=`<b>${esc(f.name)}</b><br><audio controls style="width:100%;margin-top:8px" src="${uploadedAudioURL}"></audio>`;
+});
+function playUploadedAudio(){
+  if(!uploadedAudioURL)return alert("Choose an audio file first.");
+  const a=new Audio(uploadedAudioURL);a.play();
+}
+function startAudioTranscription(){
+  const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+  if(!SR)return alert("Speech recognition is not available in this browser. Try Chrome on Android/Desktop. You can still upload audio and manually edit/paste the matter.");
+  if(recognition) recognition.stop();
+  recognition=new SR(); recognition.lang=$("srLang").value; recognition.continuous=true; recognition.interimResults=true;
+  let finalText=$("generatedMatter").value.trim();
+  recognition.onstart=()=>{recognizing=true;$("srStatus").textContent="Speech-to-text is listening. Play your authorized audio now.";};
+  recognition.onresult=e=>{
+    let interim="";
+    for(let i=e.resultIndex;i<e.results.length;i++){
+      const t=e.results[i][0].transcript;
+      if(e.results[i].isFinal) finalText+=(finalText?" ":"")+t;
+      else interim+=t;
+    }
+    $("generatedMatter").value=finalText+(interim?" "+interim:"");
+  };
+  recognition.onerror=e=>$("srStatus").textContent="Speech recognition: "+e.error;
+  recognition.onend=()=>{recognizing=false;$("srStatus").textContent="Speech-to-text stopped. Edit the generated matter if needed, then save it.";};
+  recognition.start();
+}
+function stopAudioTranscription(){if(recognition)recognition.stop();}
+function saveImportedMatter(){
+  const title=$("generatedTitle").value.trim()||"Imported Dictation";
+  const text=$("generatedMatter").value.trim();
+  if(!text)return alert("Generate or enter the English matter first.");
+  custom=JSON.parse(localStorage.getItem("spCustom")||"[]");
+  custom.push({title,wpm:+$("importWpm").value,text,source:"User/authorized audio import"});
+  localStorage.setItem("spCustom",JSON.stringify(custom));renderCustom();
+  $("srStatus").textContent="Saved to My Matters.";
+}
+function useImportedForPractice(){
+  const text=$("generatedMatter").value.trim();
+  if(!text)return alert("Generate or enter the English matter first.");
+  $("matter").value=text;$("speed").value=$("importWpm").value;openView("lab");
+}
+
 function saveCustom(){let t=$("adminTitle").value.trim(),x=$("adminText").value.trim();if(!t||!x)return alert("Add title and matter.");custom=JSON.parse(localStorage.getItem("spCustom")||"[]");custom.push({title:t,wpm:+$("adminWpm").value,text:x});localStorage.setItem("spCustom",JSON.stringify(custom));$("adminTitle").value="";$("adminText").value="";renderCustom()}
 function renderCustom(){custom=JSON.parse(localStorage.getItem("spCustom")||"[]");$("customList").innerHTML=custom.length?custom.map((m,i)=>`<div class="card" style="margin-top:8px"><b>${esc(m.title)}</b> · ${m.wpm} WPM <button class="btn" onclick="useCustom(${i})">Practice</button></div>`).join(""):"No custom matters saved."}
 function useCustom(i){let m=custom[i];$("matter").value=m.text;$("speed").value=m.wpm;openView("lab")}
