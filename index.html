@@ -18,6 +18,20 @@ section{padding:34px 0}.head{display:flex;justify-content:space-between;align-it
 
 .audio-manager{display:grid;grid-template-columns:1fr 1fr;gap:14px}.audio-box,.playlist-box{background:#fff;border:1px solid #e8e5ee;border-radius:14px;padding:18px}.audio-box h3,.playlist-box h3{margin:0 0 6px}.audio-box p,.playlist-box p{font-size:11px;color:#667085}.field{width:100%;padding:10px;border:1px solid #ddd7e8;border-radius:9px;margin:5px 0 10px}.matter-text{width:100%;min-height:220px;padding:12px;border:1px solid #ddd7e8;border-radius:10px;resize:vertical;line-height:1.6}.audio-row{border:1px solid #eeeaf3;background:#faf9fc;border-radius:10px;padding:10px;margin:8px 0}.audio-row b{font-size:11px}.audio-row small{display:block;color:#7b8495;font-size:9px;margin:3px 0 7px}.audio-row audio{width:100%;height:34px}.playlist{border:1px solid #e8e5ee;border-radius:11px;padding:12px;margin:8px 0;background:#fff}.playlist-head{display:flex;justify-content:space-between;align-items:center}.playlist-head b{font-size:12px}.playlist-items{margin-top:8px}.playlist-item{display:flex;justify-content:space-between;gap:8px;align-items:center;background:#faf9fc;border-radius:8px;padding:8px;margin:5px 0}.playlist-item span{font-size:10px}.tiny-btn{border:0;border-radius:7px;padding:6px 8px;background:#f1eafe;color:#6d28d9;font-size:9px;font-weight:850;cursor:pointer}.tiny-btn.red{background:#fff1f3;color:#b42318}
 @media(max-width:760px){.audio-manager{grid-template-columns:1fr}}
+
+@media(max-width:850px){
+ .topbar{height:auto;position:sticky}.nav{height:auto;min-height:68px;flex-wrap:wrap;padding:8px 0;gap:9px}
+ .links{display:flex;order:3;flex-basis:100%;overflow-x:auto;gap:8px;padding:3px 0 7px;scrollbar-width:none}
+ .links::-webkit-scrollbar{display:none}.links button{white-space:nowrap;background:#f7f3ff;border-radius:8px;padding:8px 10px;font-size:10px}
+ .actions{margin-left:auto}.actions .ghost{display:none}.actions .primary{padding:9px 11px}
+ .hero-grid{grid-template-columns:1fr}.preview{display:none}
+}
+@media(max-width:560px){
+ .container{width:calc(100% - 20px)}.hero{padding:38px 0}.hero h1{font-size:32px}
+ .quick,.cards,.three{grid-template-columns:1fr}.card{padding:15px}
+ .head{align-items:flex-start;gap:10px}.head h2{font-size:21px}
+ .btn{padding:9px 11px;font-size:11px}.public-audio-card audio{height:38px}
+}
 </style>
 </head>
 <body>
@@ -26,7 +40,7 @@ section{padding:34px 0}.head{display:flex;justify-content:space-between;align-it
 <nav class="links">
 <button onclick="go('home')">Home</button><button onclick="openLibrary()">English Dictations</button><button onclick="go('hindi')">Hindi Dictations</button><button onclick="openLab()">Practice</button><button onclick="openTests()">Tests</button><button onclick="openAnalysis()">Analysis</button><button onclick="openLeaderboard()">Leaderboard</button><button onclick="openAudioMatter()">Audio + Matter</button><button onclick="openLegalTyping()">Legal Typing</button>
 </nav>
-<div class="actions"><button class="btn ghost" onclick="showLogin()">Login / Signup</button><button class="btn primary" onclick="openLibrary()">Start Practice</button></div>
+<div class="actions"><button class="btn primary" onclick="openLibrary()">Start Practice</button></div>
 </div></header>
 
 <main id="home">
@@ -59,6 +73,16 @@ section{padding:34px 0}.head{display:flex;justify-content:space-between;align-it
 <div class="card"><div class="tags"><span class="tag">HINDI</span><span class="tag green">REGULAR</span></div><h3>Hindi Magazine Practice</h3><p>Longer passages for speed and stamina.</p><div class="meta">Mangal · Remington · Multiple Speeds</div><div class="practice" onclick="startMatter('Hindi Magazine Practice')">Practice Now →</div></div>
 <div class="card"><div class="tags"><span class="tag">CUSTOM</span></div><h3>Your Hindi Practice</h3><p>Create your own practice matter.</p><div class="meta">Custom · Analysis</div><div class="practice" onclick="openLab()">Create Practice →</div></div>
 </div></div></section>
+
+
+<section id="publicDictations">
+<div class="container">
+<div class="head"><div><div class="eyebrow" style="color:#8b5cf6">Public Library</div>
+<h2>All Dictations</h2><p>Every audio + matter saved by the Master appears here for practice.</p></div>
+<button class="btn ghost" onclick="refreshPublicLibrary()">Refresh</button></div>
+<div id="publicAudioGrid" class="cards"><div class="card"><h3>No dictations yet</h3><p>Master-added audio + matter will appear here.</p></div></div>
+</div>
+</section>
 
 <section id="tools"><div class="container"><div class="head"><div><div class="eyebrow" style="color:#8b5cf6">Practice Tools</div><h2>Everything beyond dictation.</h2><p>Use these tools to make each practice session count.</p></div></div><div class="three">
 <div class="card"><div class="icon">📝</div><h3>Custom Dictation</h3><p>Paste your own matter and practise it.</p><button class="btn primary" onclick="openLab()">Open Tool</button></div>
@@ -158,44 +182,6 @@ function finishLegalTyping(){
   show('Typing Test Result',`<div class="stats"><div class="stat"><small>Words Typed</small><b>${w}</b></div><div class="stat"><small>Accuracy</small><b>${a}</b></div><div class="stat"><small>WPM</small><b>${s}</b></div></div><p style="color:#667085">Attempt saved locally. Repeat the same exercise and try to improve accuracy before increasing speed.</p><button class="btn primary" onclick="openLegalTyping()">Next Exercise →</button>`);
 }
 </script>
-
-<div class="auth-screen" id="authScreen">
- <div class="auth-box">
-  <div class="logo"><span class="mark">S</span> StenoPro</div>
-  <h2 id="authTitle">Login</h2>
-  <p id="authSubtitle">Login to continue your practice.</p>
-  <div id="registerFields" style="display:none">
-   <input class="auth-input" id="authName" placeholder="Full name">
-  </div>
-  <input class="auth-input" id="authEmail" type="email" placeholder="Email address">
-  <input class="auth-input" id="authPassword" type="password" placeholder="Password">
-  <div id="authRole" class="role-note">Public account: your practice data is private to your account.</div>
-  <div class="auth-error" id="authError"></div>
-  <button class="btn primary" style="width:100%" id="authSubmit" onclick="submitAuth()">Login</button>
-  <button class="btn ghost" style="width:100%;margin-top:8px" onclick="toggleAuthMode()" id="authToggle">Create new account</button>
-  <button class="btn ghost" style="width:100%;margin-top:8px" onclick="closeAuth()">Continue as visitor</button>
- </div>
-</div>
-
-<div class="master-view" id="masterPanel">
- <div class="admin-wrap"><div class="admin-shell">
-  <aside class="admin-side">
-   <div class="logo" style="color:#fff"><span class="mark">S</span>StenoPro</div>
-   <h3>Master Panel</h3>
-   <button class="active" onclick="adminTab('overview',this)">📊 Overview</button>
-   <button onclick="adminTab('users',this)">👥 Users</button>
-   <button onclick="adminTab('matters',this)">⌨ Typing Matters</button><button onclick="adminTab('audio',this)">🎙 Audio + Matter</button>
-   <button onclick="adminTab('dictations',this)">🎧 Dictations</button>
-   <button onclick="adminTab('tests',this)">🧪 Tests</button>
-   <button onclick="adminTab('results',this)">📈 Results</button>
-   <button onclick="adminTab('settings',this)">⚙ Settings</button>
-   <button onclick="masterLogout()" style="margin-top:20px;color:#fca5a5">↪ Logout</button>
-  </aside>
-  <main class="admin-main">
-   <div id="adminContent"></div>
-  </main>
- </div></div>
-</div>
 
 <script>
 const STENO_AUTH_KEY='stenopro_accounts_v1';
@@ -360,5 +346,40 @@ async function idbPut(id,blob){let db=await idbOpen();return new Promise((res,re
 async function idbGet(id){let db=await idbOpen();return new Promise((res,rej)=>{let r=db.transaction('audio').objectStore('audio').get(id);r.onsuccess=()=>res(r.result);r.onerror=()=>rej(r.error)})}
 async function idbDelete(id){let db=await idbOpen();return new Promise((res,rej)=>{let tx=db.transaction('audio','readwrite');tx.objectStore('audio').delete(id);tx.oncomplete=res;tx.onerror=()=>rej(tx.error)})}
 </script>
+
+<script>
+/* PUBLIC MODE
+   No login/registration is required.
+   In this prototype, Master-added audio + matter is stored locally in this browser.
+   For all visitors/devices to see the same library, connect cloud storage/database later.
+*/
+async function refreshPublicLibrary(){
+ const grid=document.getElementById('publicAudioGrid'); if(!grid)return;
+ try{
+   const metas=JSON.parse(localStorage.getItem('stenopro_audio_meta')||'[]');
+   if(!metas.length){grid.innerHTML='<div class="card"><h3>No dictations yet</h3><p>Use Audio + Matter Manager to add the first public dictation.</p></div>';return}
+   const items=await Promise.all(metas.map(async m=>{
+     try{const blob=await idbGet(m.id);return {...m,url:URL.createObjectURL(blob)}}catch(e){return m}
+   }));
+   grid.innerHTML=items.filter(Boolean).map(x=>`
+    <div class="card public-audio-card">
+      <div class="tags"><span class="tag">PUBLIC</span>${x.speed?`<span class="tag green">${x.speed} WPM</span>`:''}</div>
+      <h3>${esc(x.title)}</h3>
+      <p>${wordCount(x.text)} words · Audio + Matter</p>
+      <audio controls src="${x.url||''}" style="width:100%;height:36px"></audio>
+      <div style="display:flex;gap:7px;flex-wrap:wrap;margin-top:10px">
+       <button class="btn primary" onclick="previewTyping(${x.id})">Practice</button>
+       <button class="btn ghost" onclick="showMatter(${x.id})">View Matter</button>
+      </div>
+    </div>`).join('');
+ }catch(e){grid.innerHTML='<div class="card"><h3>Library unavailable</h3><p>Please refresh the page.</p></div>'}
+}
+async function showMatter(id){
+ const metas=JSON.parse(localStorage.getItem('stenopro_audio_meta')||'[]'),x=metas.find(a=>a.id===id);if(!x)return;
+ show('Matter — '+esc(x.title),`<p style="color:#667085">${x.speed||'—'} WPM · ${wordCount(x.text)} words</p><div style="border:1px solid #eee;padding:14px;border-radius:10px;line-height:1.8;font-size:12px;max-height:420px;overflow:auto">${esc(x.text)}</div><button class="btn primary" style="margin-top:12px" onclick="previewTyping(${x.id})">Start Practice →</button>`);
+}
+document.addEventListener('DOMContentLoaded',()=>{setTimeout(refreshPublicLibrary,300)});
+</script>
 </body>
 </html>
+<script>window.openMasterPanel=function(){};window.showLogin=function(){};</script>
