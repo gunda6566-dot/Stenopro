@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>StenoPro Premium V3</title>
+<title>StenoPro — Premium Stenography Practice</title>
 <meta name="theme-color" content="#315efb">
 <style>
 *{box-sizing:border-box}body{margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,sans-serif;background:#f5f7fb;color:#17203a}
@@ -21,12 +21,49 @@ button,input,select,textarea{font:inherit}.app{display:flex;min-height:100vh}.si
 .table{width:100%;border-collapse:collapse}.table th,.table td{text-align:left;padding:10px;border-bottom:1px solid #edf0f5;font-size:12px}
 @media(max-width:900px){.side{position:static;width:100%;height:auto}.app{display:block}.main{margin-left:0;width:100%;padding:14px}.nav{display:grid;grid-template-columns:repeat(3,1fr);gap:4px}.nav button{font-size:11px}.grid{grid-template-columns:1fr 1fr}.library{grid-template-columns:1fr 1fr}.lab{grid-template-columns:1fr}.controls{grid-template-columns:1fr 1fr}}
 @media(max-width:560px){.grid,.library,.results,.controls{grid-template-columns:1fr}.top{align-items:flex-start;gap:10px;flex-direction:column}.hero h2{font-size:24px}}
+
+/* ===== StenoPro Premium UI Refresh ===== */
+:root{
+ --ink:#101a38;--blue:#315efb;--purple:#6d4aff;--bg:#f5f7fb;--line:#e5eaf3;
+ --muted:#707b91;--card:#fff;--green:#1d8b57;--shadow:0 12px 35px rgba(16,26,56,.07)
+}
+body{background:radial-gradient(circle at 90% 0%,#eef2ff 0,transparent 32%),var(--bg);color:var(--ink)}
+.side{width:255px;background:linear-gradient(180deg,#0c1531 0%,#121d3d 100%);padding:24px 16px;box-shadow:12px 0 40px rgba(16,26,56,.08);z-index:10}
+.brand{display:flex;align-items:center;gap:9px;font-size:23px;letter-spacing:-.6px;padding:3px 9px 26px;margin-bottom:8px}
+.brand small{position:absolute;margin:34px 0 0 40px;font-size:8px;letter-spacing:1.5px;color:#93a4d6}
+.brand-mark,.mobile-brand .brand-mark{display:inline-flex;width:31px;height:31px;align-items:center;justify-content:center;border-radius:9px;background:linear-gradient(135deg,#5b7bff,#7a52ff);box-shadow:0 7px 18px #315efb55;font-weight:950;color:white}
+.nav button{position:relative;padding:12px 13px;margin:4px 0;color:#aeb9d8;border:1px solid transparent;transition:.2s}
+.nav button:hover{background:#ffffff0d;color:#fff;transform:translateX(2px)}
+.nav button.active{background:linear-gradient(90deg,#ffffff18,#ffffff08);color:#fff;border-color:#ffffff12;box-shadow:inset 3px 0 #6d82ff}
+.main{margin-left:255px;width:calc(100% - 255px);padding:28px 32px;max-width:1580px}
+.top{margin-bottom:22px}.top h1{font-size:28px;letter-spacing:-.7px}.pill{background:#e9edff;color:#315efb;border:1px solid #dbe3ff}
+.hero{min-height:270px;padding:34px 38px;border-radius:26px;display:flex;justify-content:space-between;align-items:center;overflow:hidden;position:relative;background:linear-gradient(125deg,#0b1430 0%,#18285a 43%,#315efb 100%);box-shadow:0 22px 55px rgba(34,55,125,.2)}
+.hero:after{content:"";position:absolute;width:430px;height:430px;border:1px solid #ffffff18;border-radius:50%;right:80px;top:-130px;box-shadow:0 0 0 55px #ffffff05,0 0 0 110px #ffffff03}
+.hero-copy{position:relative;z-index:2;max-width:760px}.eyebrow{font-size:10px;font-weight:900;letter-spacing:1.7px;color:#9db0ec}.eyebrow.dark{color:#7b86a0}
+.hero h2{font-size:38px;line-height:1.08;letter-spacing:-1.5px;margin:12px 0}.hero h2 span{color:#9fb2ff}.hero p{font-size:14px;line-height:1.7;color:#cdd8f8;margin:0 0 20px;max-width:650px}
+.hero-actions{display:flex;gap:9px}.btn{border-radius:12px;padding:11px 15px;transition:.18s;box-shadow:none}.btn:hover{transform:translateY(-1px);box-shadow:0 8px 18px rgba(16,26,56,.12)}.btn.primary{background:#fff;color:#2444a5}.btn.glass{background:#ffffff12;border:1px solid #ffffff25;color:#fff}.btn.blue{background:linear-gradient(135deg,#315efb,#5c4eff)}
+.hero-orb{position:relative;z-index:2;width:180px;height:180px;border-radius:50%;background:#ffffff10;border:1px solid #ffffff22;display:flex;align-items:center;justify-content:center;margin-right:30px}.orb-inner{width:126px;height:126px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:linear-gradient(145deg,#ffffff1c,#ffffff06);border:1px solid #ffffff28;font-size:44px;font-weight:950;color:#fff;box-shadow:inset 0 0 35px #ffffff0d}.orb-inner span{font-size:9px;letter-spacing:2px;margin:48px 0 0 -20px;color:#b9c6f8}
+.section-head{display:flex;align-items:end;justify-content:space-between;margin:30px 2px 12px}.section-head h2{margin:4px 0 0;font-size:20px;letter-spacing:-.4px}.text-btn{border:0;background:none;color:#315efb;font-weight:800;font-size:12px;cursor:pointer}
+.grid{gap:14px;margin-top:0}.stat-grid{grid-template-columns:repeat(4,1fr)}.card{border:1px solid var(--line);border-radius:18px;box-shadow:var(--shadow);transition:.2s}.card:hover{box-shadow:0 16px 40px rgba(16,26,56,.09)}
+.stat-card{display:flex;gap:13px;align-items:center;padding:17px}.stat-icon{width:43px;height:43px;display:flex;align-items:center;justify-content:center;border-radius:12px;background:#eef2ff;color:#315efb;font-weight:950;font-size:18px}.stat-card .num{font-size:27px;margin:5px 0 0}.stat-note{font-size:10px;color:#9aa3b5}
+.dashboard-grid{display:grid;grid-template-columns:1.55fr 1fr;gap:14px;margin-top:14px}.focus-card,.quick-card{padding:20px}.card-heading{display:flex;justify-content:space-between;align-items:flex-start}.card h3{font-size:17px;letter-spacing:-.3px}.mini-badge{font-size:9px;text-transform:uppercase;letter-spacing:1px;padding:6px 8px;border-radius:20px;background:#eaf8f1;color:#1d8b57;font-weight:900}.focus-row{display:grid;grid-template-columns:48px 1fr auto;gap:13px;align-items:center;margin-top:18px}.focus-number{font-size:26px;font-weight:950;color:#315efb}.focus-row p{margin:5px 0 0;line-height:1.5}.focus-progress{height:7px;background:#edf0f6;border-radius:10px;overflow:hidden;margin:18px 0 8px}.focus-progress span{display:block;height:100%;background:linear-gradient(90deg,#315efb,#6d4aff);border-radius:10px}.focus-foot{display:flex;justify-content:space-between;font-size:10px;color:#8a94a8}.quick-card h3{margin:6px 0 11px}.quick-action{width:100%;display:flex;align-items:center;gap:10px;padding:11px;border:1px solid #edf0f5;background:#fafbfe;border-radius:12px;text-align:left;margin-top:8px;cursor:pointer;color:var(--ink);transition:.18s}.quick-action:hover{background:#f2f5ff;border-color:#dce3ff}.quick-action>span{width:33px;height:33px;display:flex;align-items:center;justify-content:center;border-radius:9px;background:#eef2ff}.quick-action div{flex:1}.quick-action b,.quick-action small{display:block}.quick-action small{color:#8a94a8;font-size:10px;margin-top:2px}.quick-action strong{color:#315efb}.library-banner{margin-top:14px;padding:18px 20px;display:flex;justify-content:space-between;align-items:center}.library-banner>div{display:flex;gap:15px;align-items:center}.library-banner h3{margin:4px 0 2px}.library-banner p{margin:0;max-width:680px}.library-badge{width:52px;height:52px;border-radius:14px;display:flex;align-items:center;justify-content:center;background:#101a38;color:#fff;font-weight:950;font-size:15px}
+.library{gap:14px}.matter-card{padding:18px}.matter-card h3{font-size:15px}.matter-card:hover{transform:translateY(-2px);box-shadow:0 14px 35px rgba(49,94,251,.1)}
+.view>.card{margin-bottom:14px}.view>.card h2{letter-spacing:-.5px}.controls{gap:12px}.controls input,.controls select{outline:none;transition:.15s}.controls input{width:100%;padding:10px;border:1px solid #dce3ef;border-radius:9px;background:#fff}.controls input:focus,.controls select:focus,.textarea:focus{border-color:#8ca1ff;box-shadow:0 0 0 3px #315efb12}
+.lab .card{box-shadow:none}.textarea{min-height:310px}.status{border:1px solid #dfe6f5;background:#f4f6ff}
+.results .res{border:1px solid #e4e9f2;background:#fafbfe}.diff{font-size:13px;line-height:2.15}
+.table th{font-size:10px;text-transform:uppercase;letter-spacing:.8px;color:#8993a8}.table td{padding:12px}
+.mobile-top{display:none}
+@media(max-width:1050px){.stat-grid{grid-template-columns:1fr 1fr}.dashboard-grid{grid-template-columns:1fr}.hero-orb{margin-right:0}.main{padding:22px}}
+@media(max-width:900px){.side{position:static;width:100%;height:auto;padding:15px}.brand{padding-bottom:18px}.main{margin-left:0;width:100%;padding:14px}.mobile-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}.mobile-brand{font-weight:900;display:flex;align-items:center;gap:8px}.mobile-brand .brand-mark{width:27px;height:27px}.top{display:none}.nav{display:grid;grid-template-columns:repeat(4,1fr);gap:5px}.nav button{font-size:10px;text-align:center;padding:10px 5px}.hero{padding:27px}.hero-orb{display:none}}
+@media(max-width:620px){.stat-grid{grid-template-columns:1fr 1fr}.hero h2{font-size:29px}.hero p{font-size:12px}.library-banner{align-items:flex-start;gap:14px;flex-direction:column}.library-banner>div{align-items:flex-start}.focus-row{grid-template-columns:40px 1fr}.focus-row .btn{grid-column:2}.nav{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:420px){.stat-grid{grid-template-columns:1fr}.hero{padding:23px 20px}.hero-actions{flex-direction:column}.hero-actions .btn{width:100%}}
+
 </style>
 </head>
 <body>
 <div class="app">
 <aside class="side">
-<div class="brand">StenoPro <small>PREMIUM V3</small></div>
+<div class="brand"><span class="brand-mark">S</span><span>StenoPro</span><small>PREMIUM STENOGRAPHY</small></div>
 <nav class="nav">
 <button class="active" data-view="dashboard">🏠 Dashboard</button>
 <button data-view="library">🎙️ Dictations</button>
@@ -38,16 +75,53 @@ button,input,select,textarea{font:inherit}.app{display:flex;min-height:100vh}.si
 </nav>
 </aside>
 <main class="main">
+<div class="mobile-top"><div class="mobile-brand"><span class="brand-mark">S</span> StenoPro</div><span class="pill">Premium</span></div>
 <div class="top"><h1 id="pageTitle">Dashboard</h1><span class="pill">INDIAN ENGLISH DICTATION</span></div>
 
 <section id="dashboard" class="view active">
-<div class="hero"><h2>Master English Stenography.</h2><p>Practice legal dictation, blind transcription and exam-style tests in one focused workspace.</p><button class="btn primary" onclick="openView('library')">Start Practice →</button></div>
-<div class="grid">
-<div class="card"><div class="muted">PRACTICE TESTS</div><div class="num" id="statTests">0</div></div>
-<div class="card"><div class="muted">BEST ACCURACY</div><div class="num" id="statAcc">—</div></div>
-<div class="card"><div class="muted">BEST WPM</div><div class="num" id="statWpm">—</div></div>
-<div class="card"><div class="muted">STREAK</div><div class="num" id="statStreak">0 🔥</div></div>
-</div><div class="card" style="margin-top:15px"><h3>⚖️ Legal Dictation Library</h3><p class="muted">100 original 500-word legal practice matters with Supreme Court case/topic references. Choose a speed and dictate using your device's English voice.</p><button class="btn blue" onclick="openView('library')">Browse 100 Matters</button></div>
+<div class="hero">
+  <div class="hero-copy">
+    <span class="eyebrow">YOUR STENOGRAPHY WORKSPACE</span>
+    <h2>Practice smart. Type faster. <span>Clear your target.</span></h2>
+    <p>Build speed, accuracy and consistency with focused dictation, blind transcription and exam-style practice.</p>
+    <div class="hero-actions">
+      <button class="btn primary" onclick="openView('library')">Start Practice <b>→</b></button>
+      <button class="btn glass" onclick="openView('tests')">Take a Test</button>
+    </div>
+  </div>
+  <div class="hero-orb"><div class="orb-inner">S<span>PRO</span></div></div>
+</div>
+
+<div class="section-head">
+  <div><span class="eyebrow dark">AT A GLANCE</span><h2>Your practice snapshot</h2></div>
+  <button class="text-btn" onclick="openView('progress')">View progress →</button>
+</div>
+
+<div class="grid stat-grid">
+  <div class="card stat-card"><div class="stat-icon">⚡</div><div><div class="muted">BEST WPM</div><div class="num" id="statWpm">—</div><span class="stat-note">Personal best</span></div></div>
+  <div class="card stat-card"><div class="stat-icon">✓</div><div><div class="muted">BEST ACCURACY</div><div class="num" id="statAcc">—</div><span class="stat-note">Highest score</span></div></div>
+  <div class="card stat-card"><div class="stat-icon">◈</div><div><div class="muted">PRACTICE TESTS</div><div class="num" id="statTests">0</div><span class="stat-note">Completed sessions</span></div></div>
+  <div class="card stat-card"><div class="stat-icon">🔥</div><div><div class="muted">STREAK</div><div class="num" id="statStreak">0</div><span class="stat-note">Keep the momentum</span></div></div>
+</div>
+
+<div class="dashboard-grid">
+  <div class="card focus-card">
+    <div class="card-heading"><div><span class="eyebrow dark">FOCUS AREA</span><h3>Today's practice</h3></div><span class="mini-badge">Recommended</span></div>
+    <div class="focus-row"><div class="focus-number">01</div><div><b>Legal Dictation</b><p class="muted">Start with a 100 WPM matter and analyse your transcription.</p></div><button class="btn blue" onclick="openView('library')">Practice</button></div>
+    <div class="focus-progress"><span style="width:35%"></span></div>
+    <div class="focus-foot"><span>Goal: 20 minutes</span><span>Build consistency</span></div>
+  </div>
+  <div class="card quick-card">
+    <span class="eyebrow dark">QUICK ACTIONS</span><h3>Jump back in</h3>
+    <button class="quick-action" onclick="openView('lab')"><span>⌨️</span><div><b>Transcription Lab</b><small>Type & check your matter</small></div><strong>→</strong></button>
+    <button class="quick-action" onclick="openView('mistakes')"><span>🧠</span><div><b>Weak Words</b><small>Review recurring mistakes</small></div><strong>→</strong></button>
+  </div>
+</div>
+
+<div class="card library-banner">
+  <div><div class="library-badge">100+</div><div><span class="eyebrow dark">PRACTICE LIBRARY</span><h3>Legal Dictation Collection</h3><p class="muted">Original practice matters with speed tags and topic references. Choose a matter and begin dictation in one click.</p></div></div>
+  <button class="btn dark" onclick="openView('library')">Browse Library →</button>
+</div>
 </section>
 
 <section id="library" class="view">
