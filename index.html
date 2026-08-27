@@ -15,13 +15,16 @@ section{padding:34px 0}.head{display:flex;justify-content:space-between;align-it
 @media(max-width:560px){.container{width:calc(100% - 24px)}.hero h1{font-size:34px}.quick,.cards,.three{grid-template-columns:1fr}.banner{flex-direction:column;align-items:flex-start;gap:15px}.actions .ghost{display:none}}
 
 .auth-screen{position:fixed;inset:0;background:linear-gradient(135deg,#24113f,#4c1d95);display:none;align-items:center;justify-content:center;z-index:500;padding:20px}.auth-screen.show{display:flex}.auth-box{width:min(430px,100%);background:#fff;border-radius:18px;padding:26px;box-shadow:0 25px 80px #0005}.auth-box h2{margin:0 0 6px}.auth-box p{color:#667085;font-size:12px}.auth-input{width:100%;padding:11px;border:1px solid #ddd7e8;border-radius:9px;margin:6px 0 10px;outline:none}.role-note{background:#f7f3ff;border-radius:9px;padding:10px;font-size:10px;color:#6d28d9;margin:10px 0}.auth-error{color:#b42318;font-size:11px;min-height:18px}.user-pill{display:none;align-items:center;gap:8px;background:#f7f3ff;color:#5b21b6;padding:7px 10px;border-radius:20px;font-size:10px;font-weight:900}.master-only{display:none!important}.master-view{display:none}.master-view.show{display:block}.admin-wrap{background:#f7f9fc;min-height:100vh}.admin-shell{display:grid;grid-template-columns:230px 1fr;min-height:100vh}.admin-side{background:#24113f;color:#fff;padding:22px 14px}.admin-side h3{margin:0 8px 20px}.admin-side button{display:block;width:100%;text-align:left;background:none;border:0;color:#cfc3df;padding:11px 10px;border-radius:8px;cursor:pointer;font-size:11px;font-weight:800}.admin-side button.active,.admin-side button:hover{background:#ffffff12;color:#fff}.admin-main{padding:25px;max-width:1200px}.admin-cards{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}.admin-card{background:#fff;border:1px solid #e8e5ee;border-radius:13px;padding:17px}.admin-card b{font-size:25px;color:#7c3aed;display:block;margin-top:4px}.admin-table{width:100%;border-collapse:collapse;background:#fff;border:1px solid #e8e5ee;border-radius:12px;overflow:hidden}.admin-table th,.admin-table td{text-align:left;padding:12px;border-bottom:1px solid #f0edf3;font-size:11px}.admin-table th{color:#667085;text-transform:uppercase;font-size:9px;letter-spacing:.7px}.danger{background:#fff1f3;color:#b42318}.success{background:#ecfdf3;color:#15803d}@media(max-width:700px){.admin-shell{grid-template-columns:1fr}.admin-side{position:static}.admin-cards{grid-template-columns:1fr 1fr}}
+
+.audio-manager{display:grid;grid-template-columns:1fr 1fr;gap:14px}.audio-box,.playlist-box{background:#fff;border:1px solid #e8e5ee;border-radius:14px;padding:18px}.audio-box h3,.playlist-box h3{margin:0 0 6px}.audio-box p,.playlist-box p{font-size:11px;color:#667085}.field{width:100%;padding:10px;border:1px solid #ddd7e8;border-radius:9px;margin:5px 0 10px}.matter-text{width:100%;min-height:220px;padding:12px;border:1px solid #ddd7e8;border-radius:10px;resize:vertical;line-height:1.6}.audio-row{border:1px solid #eeeaf3;background:#faf9fc;border-radius:10px;padding:10px;margin:8px 0}.audio-row b{font-size:11px}.audio-row small{display:block;color:#7b8495;font-size:9px;margin:3px 0 7px}.audio-row audio{width:100%;height:34px}.playlist{border:1px solid #e8e5ee;border-radius:11px;padding:12px;margin:8px 0;background:#fff}.playlist-head{display:flex;justify-content:space-between;align-items:center}.playlist-head b{font-size:12px}.playlist-items{margin-top:8px}.playlist-item{display:flex;justify-content:space-between;gap:8px;align-items:center;background:#faf9fc;border-radius:8px;padding:8px;margin:5px 0}.playlist-item span{font-size:10px}.tiny-btn{border:0;border-radius:7px;padding:6px 8px;background:#f1eafe;color:#6d28d9;font-size:9px;font-weight:850;cursor:pointer}.tiny-btn.red{background:#fff1f3;color:#b42318}
+@media(max-width:760px){.audio-manager{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
 <header><div class="container nav">
 <div class="logo"><span class="mark">S</span>StenoPro</div>
 <nav class="links">
-<button onclick="go('home')">Home</button><button onclick="openLibrary()">English Dictations</button><button onclick="go('hindi')">Hindi Dictations</button><button onclick="openLab()">Practice</button><button onclick="openTests()">Tests</button><button onclick="openAnalysis()">Analysis</button><button onclick="openLeaderboard()">Leaderboard</button><button onclick="openLegalTyping()">Legal Typing</button>
+<button onclick="go('home')">Home</button><button onclick="openLibrary()">English Dictations</button><button onclick="go('hindi')">Hindi Dictations</button><button onclick="openLab()">Practice</button><button onclick="openTests()">Tests</button><button onclick="openAnalysis()">Analysis</button><button onclick="openLeaderboard()">Leaderboard</button><button onclick="openAudioMatter()">Audio + Matter</button><button onclick="openLegalTyping()">Legal Typing</button>
 </nav>
 <div class="actions"><button class="btn ghost" onclick="showLogin()">Login / Signup</button><button class="btn primary" onclick="openLibrary()">Start Practice</button></div>
 </div></header>
@@ -181,7 +184,7 @@ function finishLegalTyping(){
    <h3>Master Panel</h3>
    <button class="active" onclick="adminTab('overview',this)">📊 Overview</button>
    <button onclick="adminTab('users',this)">👥 Users</button>
-   <button onclick="adminTab('matters',this)">⌨ Typing Matters</button>
+   <button onclick="adminTab('matters',this)">⌨ Typing Matters</button><button onclick="adminTab('audio',this)">🎙 Audio + Matter</button>
    <button onclick="adminTab('dictations',this)">🎧 Dictations</button>
    <button onclick="adminTab('tests',this)">🧪 Tests</button>
    <button onclick="adminTab('results',this)">📈 Results</button>
@@ -267,6 +270,7 @@ function adminTab(tab,btn){
  if(tab==='overview') c=`<h1>Master Dashboard</h1><p style="color:#667085">Complete control centre for StenoPro.</p><div class="admin-cards"><div class="admin-card">Students<b>${students.length}</b></div><div class="admin-card">Active Users<b>${students.filter(x=>x.active!==false).length}</b></div><div class="admin-card">Typing Exercises<b>100</b></div><div class="admin-card">System<b style="font-size:15px">READY</b></div></div><div class="card" style="margin-top:14px"><h3>Quick actions</h3><button class="btn primary" onclick="adminTab('users')">Manage Users</button> <button class="btn primary" onclick="adminTab('matters')">Manage Matters</button> <button class="btn ghost" onclick="setupMaster()">Reset / Create Master</button></div>`;
  if(tab==='users') c=`<h1>Users</h1><p style="color:#667085">Student accounts registered on this browser.</p><table class="admin-table"><tr><th>Name</th><th>Email</th><th>Status</th><th>Action</th></tr>${students.map((u,i)=>`<tr><td>${u.name}</td><td>${u.email}</td><td>${u.active===false?'<span class="tag">Blocked</span>':'<span class="tag green">Active</span>'}</td><td><button class="btn ${u.active===false?'success':'danger'}" onclick="toggleUser(${i})">${u.active===false?'Unblock':'Block'}</button></td></tr>`).join('')||'<tr><td colspan="4">No students yet.</td></tr>'}</table>`;
  if(tab==='matters') c=`<h1>Typing Matters</h1><p style="color:#667085">Your 100 legal typing exercises are ready. Connect your licensed/official matter dataset here when you want to replace or expand them.</p><div class="admin-cards"><div class="admin-card">Legal Exercises<b>100</b></div><div class="admin-card">Avg. Words<b>1,024</b></div><div class="admin-card">Practice Speed<b>40–80</b></div><div class="admin-card">Status<b style="font-size:15px">READY</b></div></div>`;
+ if(tab==='audio') c=`<h1>Audio + Matter Manager</h1><p style="color:#667085">Master can manage the audio-and-matter library from this panel. The public practice screen uses the same saved browser library in this prototype.</p><div class="card"><button class="btn primary" onclick="openAudioMatter()">Open Audio + Matter Manager</button></div>`;
  if(tab==='dictations') c=`<h1>Dictations</h1><div class="card"><h3>Dictation Library Management</h3><p>Master can add English/Hindi dictations, speed levels, audio references and answer text after the database is connected.</p><button class="btn primary">Add Dictation</button></div>`;
  if(tab==='tests') c=`<h1>Tests</h1><div class="card"><h3>Test Management</h3><p>Create 80 / 100 / 120 WPM tests, set duration and assign matters.</p><button class="btn primary">Create Test</button></div>`;
  if(tab==='results') c=`<h1>Results & Analytics</h1><div class="card"><h3>Student Performance</h3><p>After secure database connection, this panel will show student-wise WPM, accuracy, mistakes, attempts and trends.</p></div>`;
@@ -280,6 +284,81 @@ function wireLoginButtons(){
  document.querySelectorAll('.actions .ghost').forEach(b=>{if(/login/i.test(b.textContent))b.onclick=()=>openAuth('login')});
 }
 document.addEventListener('DOMContentLoaded',()=>{refreshAuthUI();wireLoginButtons()});
+</script>
+
+<script>
+const AUDIO_DB='StenoProAudioDB';
+let audioItems=[];
+let playlists=[];
+function openAudioMatter(){
+  loadAudioState().then(()=>{
+    show('Audio + Matter Practice',`
+    <div class="audio-manager">
+      <div class="audio-box">
+        <div class="eyebrow" style="color:#8b5cf6">CREATE PRACTICE</div>
+        <h3>Add Audio + Spoken Matter</h3>
+        <p>Upload an audio file and paste the exact matter spoken in that audio. Save it, then add it to any playlist.</p>
+        <input class="field" id="amTitle" placeholder="Matter title">
+        <input class="field" id="amSpeed" type="number" min="1" max="300" placeholder="Speed (WPM), e.g. 100">
+        <input class="field" id="amAudio" type="file" accept="audio/*">
+        <textarea class="matter-text" id="amText" placeholder="Paste the exact matter spoken in the audio..."></textarea>
+        <button class="btn primary" onclick="saveAudioMatter()">Save Audio + Matter</button>
+        <div id="amMsg" style="font-size:10px;color:#667085;margin-top:8px"></div>
+      </div>
+      <div class="playlist-box">
+        <div class="eyebrow" style="color:#8b5cf6">MY PLAYLISTS</div>
+        <h3>Practice whenever you want</h3>
+        <p>Create your own playlists and run them as a practice/test session.</p>
+        <input class="field" id="plName" placeholder="Playlist name">
+        <button class="btn ghost" onclick="createPlaylist()">+ Create Playlist</button>
+        <div id="playlistList">${renderPlaylists()}</div>
+      </div>
+    </div>
+    <div class="audio-box" style="margin-top:14px">
+      <div class="eyebrow" style="color:#8b5cf6">MY MATTERS</div><h3>Saved Audio Library</h3>
+      <div id="audioList">${renderAudioItems()}</div>
+    </div>`);
+  });
+}
+function renderAudioItems(){
+ if(!audioItems.length)return '<p>No saved matters yet. Add your first audio + matter above.</p>';
+ return audioItems.map(x=>`<div class="audio-row"><b>${esc(x.title)}</b><small>${x.speed?x.speed+' WPM · ':''}${wordCount(x.text)} words</small><audio controls src="${x.url}"></audio><div style="display:flex;gap:6px;margin-top:6px;flex-wrap:wrap"><button class="tiny-btn" onclick="previewTyping(${x.id})">Practice</button>${playlists.map(p=>`<button class="tiny-btn" onclick="addToPlaylist(${p.id},${x.id})">+ ${esc(p.name)}</button>`).join('')}<button class="tiny-btn red" onclick="deleteAudio(${x.id})">Delete</button></div></div>`).join('');
+}
+function renderPlaylists(){
+ if(!playlists.length)return '<p>No playlists yet.</p>';
+ return playlists.map(p=>`<div class="playlist"><div class="playlist-head"><b>📁 ${esc(p.name)}</b><div><button class="tiny-btn" onclick="startPlaylist(${p.id})">Start Test</button> <button class="tiny-btn red" onclick="deletePlaylist(${p.id})">Delete</button></div></div><div class="playlist-items">${(p.items||[]).map(id=>{let x=audioItems.find(a=>a.id===id);return x?`<div class="playlist-item"><span>${esc(x.title)} · ${x.speed||'—'} WPM</span><button class="tiny-btn red" onclick="removeFromPlaylist(${p.id},${id})">Remove</button></div>`:''}).join('')||'<small style="color:#8b93a3">Add saved matters using the buttons above.</small>'}</div></div>`).join('');
+}
+function esc(s){return String(s||'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));}
+function wordCount(s){return s.trim()?s.trim().split(/\s+/).length:0}
+function getMeta(){return JSON.parse(localStorage.getItem('stenopro_audio_meta')||'[]')}
+function saveMeta(x){localStorage.setItem('stenopro_audio_meta',JSON.stringify(x))}
+function loadAudioState(){
+ const metas=getMeta();
+ return Promise.all(metas.map(m=>idbGet(m.id).then(blob=>{if(blob)m.url=URL.createObjectURL(blob);return m}))).then(a=>{audioItems=a.filter(Boolean);playlists=JSON.parse(localStorage.getItem('stenopro_playlists')||'[]')});
+}
+function saveAudioMatter(){
+ const title=document.getElementById('amTitle').value.trim(), speed=Number(document.getElementById('amSpeed').value)||0, text=document.getElementById('amText').value.trim(), file=document.getElementById('amAudio').files[0], msg=document.getElementById('amMsg');
+ if(!title||!text||!file){msg.textContent='Title, audio file and matter are required.';return}
+ const id=Date.now();
+ idbPut(id,file).then(()=>{let m=getMeta();m.push({id,title,speed,text,filename:file.name,created:new Date().toISOString()});saveMeta(m);msg.textContent='Saved successfully.';setTimeout(openAudioMatter,250)});
+}
+function createPlaylist(){
+ const n=document.getElementById('plName').value.trim();if(!n)return;
+ playlists.push({id:Date.now(),name:n,items:[]});localStorage.setItem('stenopro_playlists',JSON.stringify(playlists));openAudioMatter();
+}
+function addToPlaylist(pid,aid){let p=playlists.find(x=>x.id===pid);if(p&&!p.items.includes(aid))p.items.push(aid);localStorage.setItem('stenopro_playlists',JSON.stringify(playlists));openAudioMatter()}
+function removeFromPlaylist(pid,aid){let p=playlists.find(x=>x.id===pid);if(p)p.items=p.items.filter(x=>x!==aid);localStorage.setItem('stenopro_playlists',JSON.stringify(playlists));openAudioMatter()}
+function deletePlaylist(pid){playlists=playlists.filter(x=>x.id!==pid);localStorage.setItem('stenopro_playlists',JSON.stringify(playlists));openAudioMatter()}
+function deleteAudio(id){audioItems=audioItems.filter(x=>x.id!==id);saveMeta(audioItems.map(x=>({id:x.id,title:x.title,speed:x.speed,text:x.text,filename:x.filename,created:x.created})));playlists.forEach(p=>p.items=p.items.filter(x=>x!==id));localStorage.setItem('stenopro_playlists',JSON.stringify(playlists));idbDelete(id).then(openAudioMatter)}
+function previewTyping(id){let x=audioItems.find(a=>a.id===id);if(!x)return;show('Practice — '+esc(x.title),`<p style="color:#667085">Play the audio, write shorthand, then transcribe below.</p><audio controls src="${x.url}" style="width:100%"></audio><div class="stats"><div class="stat"><small>Speed</small><b>${x.speed||'—'}</b><small>WPM</small></div><div class="stat"><small>Source Words</small><b>${wordCount(x.text)}</b></div><div class="stat"><small>Mode</small><b>Steno</b></div></div><textarea id="audioTyping" class="matter-text" placeholder="Type your transcription here..."></textarea><button class="btn primary" onclick="checkAudioTyping(${id})">Submit Transcription</button>`)}
+function checkAudioTyping(id){let x=audioItems.find(a=>a.id===id),t=document.getElementById('audioTyping')?.value||'',a=x.text.trim().split(/\s+/),b=t.trim()?t.trim().split(/\s+/):[],c=0;for(let i=0;i<Math.min(a.length,b.length);i++)if(a[i].replace(/[.,;:!?"]/g,'').toLowerCase()===b[i].replace(/[.,;:!?"]/g,'').toLowerCase())c++;let acc=b.length?Math.round(c/Math.max(a.length,b.length)*100):0;show('Practice Result',`<div class="stats"><div class="stat"><small>Typed</small><b>${b.length}</b><small>words</small></div><div class="stat"><small>Accuracy</small><b>${acc}%</b></div><div class="stat"><small>Source</small><b>${a.length}</b><small>words</small></div></div><p style="color:#667085">Result calculated against the matter you saved with this audio.</p>`)}
+function startPlaylist(pid){let p=playlists.find(x=>x.id===pid);if(!p||!p.items.length){alert('Add at least one matter to this playlist.');return}let items=p.items.map(id=>audioItems.find(x=>x.id===id)).filter(Boolean);let i=0;function next(){if(i>=items.length){show('Playlist Complete',`<p>You completed <b>${esc(p.name)}</b>.</p><button class="btn primary" onclick="openAudioMatter()">Back to Playlists</button>`);return}let x=items[i++];show('Playlist Test — '+esc(p.name),`<p style="color:#667085">Matter ${i} of ${items.length} · ${x.speed||'—'} WPM</p><audio controls autoplay src="${x.url}" style="width:100%"></audio><textarea id="audioTyping" class="matter-text" placeholder="Type your transcription here..."></textarea><button class="btn primary" onclick="playlistSubmit(${x.id},${pid},${i},${items.length})">Submit & Next →</button>`)}window.playlistNext=next;next()}
+function playlistSubmit(aid,pid,i,total){checkAudioTyping(aid);setTimeout(()=>{if(i<total)startPlaylistFrom(pid,i);},300)}
+function startPlaylistFrom(pid,start){let p=playlists.find(x=>x.id===pid);let items=p.items.slice(start-1).map(id=>audioItems.find(x=>x.id===id)).filter(Boolean),idx=0;function n(){if(idx>=items.length){show('Playlist Complete',`<p>You completed <b>${esc(p.name)}</b>.</p><button class="btn primary" onclick="openAudioMatter()">Back to Playlists</button>`);return}let x=items[idx++];show('Playlist Test — '+esc(p.name),`<p style="color:#667085">Matter ${start+idx-1} of ${p.items.length} · ${x.speed||'—'} WPM</p><audio controls autoplay src="${x.url}" style="width:100%"></audio><textarea id="audioTyping" class="matter-text" placeholder="Type your transcription here..."></textarea><button class="btn primary" onclick="playlistStep(${x.id},${pid},${start+idx-1},${p.items.length})">Submit & Next →</button>`)}window.playlistStep=function(a,pid,pos,total){checkAudioTyping(a);setTimeout(()=>{if(pos<total)startPlaylistFrom(pid,pos+1);},300)};n()}
+function idbOpen(){return new Promise((res,rej)=>{let r=indexedDB.open(AUDIO_DB,1);r.onupgradeneeded=()=>r.result.createObjectStore('audio');r.onsuccess=()=>res(r.result);r.onerror=()=>rej(r.error)})}
+async function idbPut(id,blob){let db=await idbOpen();return new Promise((res,rej)=>{let tx=db.transaction('audio','readwrite');tx.objectStore('audio').put(blob,id);tx.oncomplete=res;tx.onerror=()=>rej(tx.error)})}
+async function idbGet(id){let db=await idbOpen();return new Promise((res,rej)=>{let r=db.transaction('audio').objectStore('audio').get(id);r.onsuccess=()=>res(r.result);r.onerror=()=>rej(r.error)})}
+async function idbDelete(id){let db=await idbOpen();return new Promise((res,rej)=>{let tx=db.transaction('audio','readwrite');tx.objectStore('audio').delete(id);tx.oncomplete=res;tx.onerror=()=>rej(tx.error)})}
 </script>
 </body>
 </html>
